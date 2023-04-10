@@ -2,10 +2,14 @@ package com.example.demo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +25,8 @@ public class ProducerController {
     }
 
     @PostMapping(value = "/collect")
-    public void collectDocumentData(@RequestBody String document) throws JsonProcessingException {
+    public void collectDocumentData(@RequestBody String document) throws IOException {
+
         topicProducer.collectDocumentData(document);
     }
 
@@ -29,6 +34,7 @@ public class ProducerController {
     public String SendCollectedData(){
         return topicListener.getKafkaMessage();
     }
+
 }
 
 
