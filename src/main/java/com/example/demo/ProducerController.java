@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,9 +13,21 @@ public class ProducerController {
 
     private final TopicProducer topicProducer;
 
-    @PostMapping(value = "/send")
-    public void send(@RequestBody Document document) throws JsonProcessingException {
-        topicProducer.send(document);
+    private final TopicListener topicListener;
+
+    @PostMapping(value = "/type")
+    public void getDocumentType(@RequestBody String document) throws JsonProcessingException {
+        topicProducer.getDocumentType(document);
+    }
+
+    @PostMapping(value = "/collect")
+    public void collectDocumentData(@RequestBody String document) throws JsonProcessingException {
+        topicProducer.collectDocumentData(document);
+    }
+
+    @GetMapping(value = "/collect")
+    public String SendCollectedData(){
+        return topicListener.getKafkaMessage();
     }
 }
 
