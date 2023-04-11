@@ -30,13 +30,13 @@ public class TopicProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     public void getDocumentType(String documentJson) throws JsonProcessingException {
-        //String documentJson = objectMapper.writeValueAsString(document);
         log.info("Payload : {}", documentJson);
-        kafkaTemplate.send(typageTopic.name(), documentJson);
+        String jsonString = "{\"type\":\"" + documentJson + "\"}";
+       // String jsonString = "{\"id\":\"12345\",\"siren\":\"56789\",\"refMandat\":\"98765\",\"attribute1\":\"value1\",\"attribute2\":\"value2\",\"attribute3\":\"value3\"}";
+        kafkaTemplate.send(typageTopic.name(), jsonString);
     }
 
     public void collectDocumentData(String documentJson) throws JsonProcessingException {
-        //String documentJson = objectMapper.writeValueAsString(document);
         log.info("Payload : {}", documentJson);
         String jsonString = "{\"id\":\"12345\",\"siren\":\"56789\",\"refMandat\":\"98765\",\"attribute1\":\"value1\",\"attribute2\":\"value2\",\"attribute3\":\"value3\"}";
         log.info("Payload : {}", jsonString);

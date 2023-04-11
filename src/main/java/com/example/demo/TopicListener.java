@@ -6,18 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -50,25 +46,12 @@ public class TopicListener {
     @KafkaListener(topics = "#{@typageTopic.name}",groupId = "group_id")
     public void processDocumentForTypage(@Payload String payload) throws JsonProcessingException {
 
-        //Document tiers = objectMapper.readValue(payload, Document.class);
-
         List<String> attributesList = new ArrayList<>();
 
         // Parse the JSON string into a JsonNode object
         JsonNode jsonNode = objectMapper.readTree(payload);
 
-        // Extract keys from the JsonNode object
-        Iterator<String> fieldNames = jsonNode.fieldNames();
-        while (fieldNames.hasNext()) {
-            String fieldName = fieldNames.next();
-            attributesList.add(fieldName);
-        }
-
-        if (attributesList.containsAll(tiersAttributes)) {
-            System.out.println("This is Tiers");
-        } else {
-            System.out.println("This is not a Tiers");
-        }
+        kafkaMessage = jsonNode.get("type").asText();
 
     }
 
@@ -94,27 +77,6 @@ public class TopicListener {
         }
 
         kafkaMessage = payload;
-
-        /*
-        Document tiers = objectMapper.readValue(payload, Document.class);
-
-        List<String> attributesList = new ArrayList<>();
-        attributesList.add("Id: " + tiers.getId());
-        attributesList.add("Name: " + tiers.getName());
-        attributesList.add("Siren: " + tiers.getSiren());
-        attributesList.add("Ref Mandat: " + tiers.getRefMandat());
-        for (Map.Entry<String, String> entry : tiers.getAdditionalAttributes().entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            attributesList.add(key + ": " + value);
-        }
-
-        log.info("Topic : " + collecteTopic.name());
-        log.info("List of Attributes:");
-        for (String attribute : attributesList) {
-            log.info(attribute);
-        }
-         */
 
     }
 
