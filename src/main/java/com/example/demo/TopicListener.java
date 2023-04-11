@@ -29,7 +29,10 @@ public class TopicListener {
     @Autowired
     private NewTopic collecteTopic;
 
-    private String kafkaMessage;
+    private String typageMessage;
+
+    private String collectMessage;
+
 
     List<String> tiersAttributes = List.of("id","name","siren","refMandat");
 
@@ -46,12 +49,12 @@ public class TopicListener {
     @KafkaListener(topics = "#{@typageTopic.name}",groupId = "group_id")
     public void processDocumentForTypage(@Payload String payload) throws JsonProcessingException {
 
-        List<String> attributesList = new ArrayList<>();
-
         // Parse the JSON string into a JsonNode object
         JsonNode jsonNode = objectMapper.readTree(payload);
 
-        kafkaMessage = jsonNode.get("type").asText();
+        typageMessage = jsonNode.get("type").asText();
+        log.info(typageMessage);
+
 
     }
 
@@ -76,13 +79,18 @@ public class TopicListener {
             log.info(attribute);
         }
 
-        kafkaMessage = payload;
+        collectMessage = payload;
 
     }
 
-    public String getKafkaMessage(){
-        return this.kafkaMessage;
+    public String getTypageMessage(){
+        return this.typageMessage;
     }
+
+    public String getCollectMessage(){
+        return this.collectMessage;
+    }
+
 
 
 

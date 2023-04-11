@@ -2,12 +2,14 @@ package com.example.demo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 public class ProducerController {
 
@@ -15,8 +17,10 @@ public class ProducerController {
 
     private final TopicListener topicListener;
 
+    private String document;
+
     @PostMapping(value = "/type")
-    public void getDocumentType(@RequestBody String document) throws JsonProcessingException {
+    public String getDocumentType(@RequestBody String document) throws JsonProcessingException {
         // Decode Base64 string to byte array
         byte[] fileContent = Base64.getDecoder().decode(document);
 
@@ -24,6 +28,19 @@ public class ProducerController {
         String fileClassification = classifyFile(fileContent , getFilterParameters());
 
         topicProducer.getDocumentType(fileClassification);
+        String result = topicListener.getTypageMessage();
+        while(result == null){
+            try {
+                Thread.sleep(100); // Sleep for 100 milliseconds
+            } catch (InterruptedException e) {
+                // Handle InterruptedException if necessary
+                e.printStackTrace();
+            }
+            result = topicListener.getTypageMessage();
+        }
+
+        log.info(result);
+        return result;
     }
 
     @PostMapping(value = "/collect")
@@ -74,13 +91,20 @@ public class ProducerController {
 
     @GetMapping(value = "/collect")
     public String SendCollectedData(){
-        return topicListener.getKafkaMessage();
+        return this.document;
     }
 
-    @GetMapping(value = "/type")
-    public String SendTypeOfDocument(){
-        return topicListener.getKafkaMessage();
+    @PostMapping(value = "/collect/demo")
+    public String sendCollectData(@RequestBody String document){
+        setDocument(document);
+        return document;
     }
+
+    public void setDocument(String val){
+        this.document=val;
+    }
+
+
 
 }
 
