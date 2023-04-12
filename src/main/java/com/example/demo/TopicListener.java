@@ -1,4 +1,6 @@
+/*
 package com.example.demo;
+
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -32,15 +34,6 @@ public class TopicListener {
     private String typageMessage;
 
     private String collectMessage;
-
-
-    List<String> tiersAttributes = List.of("id","name","siren","refMandat");
-
-    List<String> contratAttributes = List.of("id","name","siren","refMandat");
-
-    List<String> DossierAttributes = List.of("id","name","siren","refMandat");
-
-
 
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -96,3 +89,5 @@ public class TopicListener {
 
 
 }
+
+ */

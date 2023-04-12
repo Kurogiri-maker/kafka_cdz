@@ -19,7 +19,7 @@ public class ProducerController {
 
     private final TopicProducer topicProducer;
 
-    private final TopicListener topicListener;
+    // private final TopicListener topicListener;
 
     private String document;
 
@@ -31,7 +31,9 @@ public class ProducerController {
         // Perform file classification based on fileContent
         String fileClassification = classifyFile(fileContent , getFilterParameters());
 
+
         topicProducer.getDocumentType(fileClassification);
+        /*
         String result = topicListener.getTypageMessage();
         while(result == null){
             try {
@@ -44,7 +46,9 @@ public class ProducerController {
         }
 
         log.info(result);
-        return result;
+        */
+        return "Message Produced";
+
     }
 
     @PostMapping(value = "/collect")
