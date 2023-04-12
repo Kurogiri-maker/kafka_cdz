@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+
+import java.io.ByteArrayInputStream;
 
 @RestController
 @Slf4j
@@ -20,7 +24,7 @@ public class ProducerController {
     private String document;
 
     @PostMapping(value = "/type")
-    public String getDocumentType(@RequestBody String document) throws JsonProcessingException {
+    public String getDocumentType(@RequestBody String document) throws IOException {
         // Decode Base64 string to byte array
         byte[] fileContent = Base64.getDecoder().decode(document);
 
@@ -48,9 +52,23 @@ public class ProducerController {
         topicProducer.collectDocumentData(document);
     }
 
-    private String classifyFile(byte[] fileContent , List<FilterParameter> filterParameters) {
+    private String extractTextFromPdf(byte[] fileBytes) throws IOException {
+        PDDocument document = null;
+        try {
+            document = PDDocument.load(new ByteArrayInputStream(fileBytes));
+            PDFTextStripper pdfTextStripper = new PDFTextStripper();
+            return pdfTextStripper.getText(document);
+        } finally {
+            if (document != null) {
+                document.close();
+            }
+        }
+    }
+    private String classifyFile(byte[] fileContent , List<FilterParameter> filterParameters) throws IOException {
 
-        String content = new String(fileContent, StandardCharsets.UTF_8);
+        //String content = new String(fileContent, StandardCharsets.UTF_8);
+        String content = extractTextFromPdf(fileContent);
+        log.info("Content : " +content);
         // Create a map to store the count of parameters for each category
         Map<String, Integer> categoryCountMap = new HashMap<>();
 
