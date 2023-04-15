@@ -32,7 +32,6 @@ public class TopicProducer {
     public void getDocumentType(String documentJson) throws JsonProcessingException {
         log.info("Payload : {}", documentJson);
         String jsonString = "{\"type\":\"" + documentJson + "\"}";
-       // String jsonString = "{\"id\":\"12345\",\"siren\":\"56789\",\"refMandat\":\"98765\",\"attribute1\":\"value1\",\"attribute2\":\"value2\",\"attribute3\":\"value3\"}";
         kafkaTemplate.send(typageTopic.name(), jsonString);
     }
 

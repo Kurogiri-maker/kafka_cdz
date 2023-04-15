@@ -3,6 +3,9 @@ package com.example.demo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +25,28 @@ public class ProducerController {
     // private final TopicListener topicListener;
 
     private String document;
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+
+
+    @KafkaListener(topics = "pdf-type", groupId = "group_id")
+    public void consume(String message) throws IOException {
+        // Decode Base64 string to byte array
+        byte[] fileContent = Base64.getDecoder().decode(message);
+
+        // Perform file classification based on fileContent
+        String fileClassification = classifyFile(fileContent , getFilterParameters());
+
+        // Produce message to another Kafka topic
+        kafkaTemplate.send("pdf-type-result", fileClassification);
+
+        log.info("Message processed and sent to Kafka topic pdf-type-result: {}", fileClassification);
+    }
+
+
+
 
     @PostMapping(value = "/type")
     public String getDocumentType(@RequestBody String document) throws IOException {
