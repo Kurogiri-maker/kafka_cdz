@@ -1,4 +1,6 @@
+/*
 package com.example.demo;
+
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
@@ -36,3 +38,4 @@ public class KafkaConfiguration {
         return new NewTopic("collecte", 1, (short) 1);
     }
 }
+*/

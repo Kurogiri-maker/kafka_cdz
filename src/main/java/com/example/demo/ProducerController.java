@@ -1,11 +1,15 @@
 package com.example.demo;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.cos.COSBase;
+import org.apache.pdfbox.cos.COSStream;
+import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
+import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -17,11 +21,12 @@ import java.io.ByteArrayInputStream;
 @RequiredArgsConstructor
 public class ProducerController {
 
-    private final TopicProducer topicProducer;
+    //private final TopicProducer topicProducer;
 
     // private final TopicListener topicListener;
 
-    private String document;
+    ObjectMapper mapper = new ObjectMapper();
+
 
     @PostMapping(value = "/type")
     public String getDocumentType(@RequestBody String document) throws IOException {
@@ -31,29 +36,27 @@ public class ProducerController {
         // Perform file classification based on fileContent
         String fileClassification = classifyFile(fileContent , getFilterParameters());
 
+        Map<String,String> metadataStringMap = extractMetadataFromPdf(fileContent);
 
-        topicProducer.getDocumentType(fileClassification);
-        /*
-        String result = topicListener.getTypageMessage();
-        while(result == null){
-            try {
-                Thread.sleep(100); // Sleep for 100 milliseconds
-            } catch (InterruptedException e) {
-                // Handle InterruptedException if necessary
-                e.printStackTrace();
-            }
-            result = topicListener.getTypageMessage();
+        Map<String,String> metaData = new HashMap<>();
+        metaData.put("Type",fileClassification);
+        for (Map.Entry<String, String> entry : metadataStringMap.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            metadataStringMap.put(key, value);
         }
 
-        log.info(result);
-        */
-        return "Message Produced";
+        String json = mapper.writeValueAsString(metaData);
+        //topicProducer.getDocumentType(fileClassification);
+        return json;
 
     }
 
     @PostMapping(value = "/collect")
-    public void collectDocumentData(@RequestBody String document) throws IOException {
-        topicProducer.collectDocumentData(document);
+    public String collectDocumentData(@RequestBody String document) throws IOException {
+        //topicProducer.collectDocumentData(document);
+        String jsonString = "{\"id\":\"12345\",\"siren\":\"56789\",\"refMandat\":\"98765\",\"attribute1\":\"value1\",\"attribute2\":\"value2\",\"attribute3\":\"value3\"}";
+        return jsonString;
     }
 
     private String extractTextFromPdf(byte[] fileBytes) throws IOException {
@@ -72,7 +75,6 @@ public class ProducerController {
 
         //String content = new String(fileContent, StandardCharsets.UTF_8);
         String content = extractTextFromPdf(fileContent);
-        log.info("Content : " +content);
         // Create a map to store the count of parameters for each category
         Map<String, Integer> categoryCountMap = new HashMap<>();
 
@@ -110,21 +112,36 @@ public class ProducerController {
         return filterParameters;
     }
 
+    private Map<String, String> extractMetadataFromPdf(byte[] fileBytes) throws IOException{
+        PDDocument document = null;
+        try {
+            document = PDDocument.load(new ByteArrayInputStream(fileBytes));
+            Map<String,String> metadataMap = new HashMap<>();
+            PDDocumentInformation info = document.getDocumentInformation();
+            if(info!=null) {
+                metadataMap.put("Title", info.getTitle());
+                log.info(info.getTitle());
+                metadataMap.put("Author", info.getAuthor());
+                metadataMap.put("Subject", info.getSubject());
+                metadataMap.put("Keywords", info.getKeywords());
+                metadataMap.put("Creator", info.getCreator());
+                metadataMap.put("Producer", info.getProducer());
+                metadataMap.put("Creation Date", info.getCreationDate().toString());
+                metadataMap.put("Modification Date", info.getModificationDate().toString());
+                metadataMap.put("Trapped", info.getTrapped());
+                return metadataMap;
+            }
 
-    @GetMapping(value = "/collect")
-    public String SendCollectedData(){
-        return this.document;
+        } finally {
+            if (document != null) {
+                document.close();
+            }
+        }
+
+        return null;
     }
 
-    @PostMapping(value = "/collect/demo")
-    public String sendCollectData(@RequestBody String document){
-        setDocument(document);
-        return document;
-    }
 
-    public void setDocument(String val){
-        this.document=val;
-    }
 
 
 
