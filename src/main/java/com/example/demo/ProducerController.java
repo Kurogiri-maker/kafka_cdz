@@ -3,13 +3,10 @@ package com.example.demo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pdfbox.cos.COSBase;
-import org.apache.pdfbox.cos.COSStream;
-import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
-import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -30,23 +27,31 @@ public class ProducerController {
 
     @PostMapping(value = "/type")
     public String getDocumentType(@RequestBody String document) throws IOException {
+
         // Decode Base64 string to byte array
         byte[] fileContent = Base64.getDecoder().decode(document);
+
 
         // Perform file classification based on fileContent
         String fileClassification = classifyFile(fileContent , getFilterParameters());
 
         Map<String,String> metadataStringMap = extractMetadataFromPdf(fileContent);
 
-        Map<String,String> metaData = new HashMap<>();
+        Map<String,String> metaData = new LinkedHashMap<>();
         metaData.put("Type",fileClassification);
+
         for (Map.Entry<String, String> entry : metadataStringMap.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            metadataStringMap.put(key, value);
+            log.info(key +" : "+ value);
+            metaData.put(key, value);
         }
 
+
+
         String json = mapper.writeValueAsString(metaData);
+
+
         //topicProducer.getDocumentType(fileClassification);
         return json;
 
@@ -116,21 +121,34 @@ public class ProducerController {
         PDDocument document = null;
         try {
             document = PDDocument.load(new ByteArrayInputStream(fileBytes));
-            Map<String,String> metadataMap = new HashMap<>();
-            PDDocumentInformation info = document.getDocumentInformation();
-            if(info!=null) {
-                metadataMap.put("Title", info.getTitle());
-                log.info(info.getTitle());
-                metadataMap.put("Author", info.getAuthor());
-                metadataMap.put("Subject", info.getSubject());
-                metadataMap.put("Keywords", info.getKeywords());
-                metadataMap.put("Creator", info.getCreator());
-                metadataMap.put("Producer", info.getProducer());
-                metadataMap.put("Creation Date", info.getCreationDate().toString());
-                metadataMap.put("Modification Date", info.getModificationDate().toString());
-                metadataMap.put("Trapped", info.getTrapped());
-                return metadataMap;
+            PDDocumentInformation metadata = document.getDocumentInformation();
+            if (metadata != null) {
+                Map<String,String> metadataStringMap = new LinkedHashMap<>();
+                metadataStringMap.put("Title", metadata.getTitle());
+                metadataStringMap.put("Author", metadata.getAuthor());
+                metadataStringMap.put("Subject", metadata.getSubject());
+                metadataStringMap.put("Keywords", metadata.getKeywords());
+                metadataStringMap.put("Creator", metadata.getCreator());
+                metadataStringMap.put("Producer", metadata.getProducer());
+                // Get creation date
+                Calendar creationDate = metadata.getCreationDate();
+                Calendar modDate = metadata.getModificationDate();
+                // Convert Calendar to Date
+                Date creationDateAsDate = creationDate.getTime();
+                Date modDateAsDate = modDate.getTime();
+                // Format Date to String
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String formattedCreationDate = dateFormat.format(creationDateAsDate);
+                String formattedModDate = dateFormat.format(modDateAsDate);
+
+                metadataStringMap.put("CreationDate", formattedCreationDate);
+                metadataStringMap.put("ModDate", formattedModDate);
+
+                return metadataStringMap;
+            }else {
+                log.info("Metadata not found");
             }
+
 
         } finally {
             if (document != null) {
