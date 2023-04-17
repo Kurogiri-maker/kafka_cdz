@@ -41,7 +41,7 @@ public class TopicListener {
     private ObjectMapper objectMapper = new ObjectMapper();
 
 
-    @KafkaListener(topics = "#{@typageTopic.name}",groupId = "group_id")
+    @KafkaListener(topics = "typage",groupId = "group_id")
     public void processDocumentForTypage(@Payload String payload) throws IOException {
         topicProducer.getDocumentType(payload);
     }

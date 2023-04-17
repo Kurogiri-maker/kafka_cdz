@@ -58,7 +58,7 @@ public class TopicProducer {
         String json = objectMapper.writeValueAsString(metaData);
         log.info("From demo to pfebackend : "+json);
 
-        kafkaTemplate.send(topicName, json);
+        kafkaTemplate.send("test-topic", json);
     }
 
     public void collectDocumentData(String documentJson) {
