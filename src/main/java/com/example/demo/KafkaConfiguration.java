@@ -1,4 +1,3 @@
-/*
 package com.example.demo;
 
 
@@ -38,4 +37,3 @@ public class KafkaConfiguration {
         return new NewTopic("collecte", 1, (short) 1);
     }
 }
-*/

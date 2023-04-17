@@ -1,6 +1,4 @@
-/*
 package com.example.demo;
-
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +31,8 @@ public class TopicListener {
     @Autowired
     private NewTopic collecteTopic;
 
+    private final TopicProducer topicProducer;
+
     private String typageMessage;
 
     private String collectMessage;
@@ -40,15 +42,8 @@ public class TopicListener {
 
 
     @KafkaListener(topics = "#{@typageTopic.name}",groupId = "group_id")
-    public void processDocumentForTypage(@Payload String payload) throws JsonProcessingException {
-
-        // Parse the JSON string into a JsonNode object
-        JsonNode jsonNode = objectMapper.readTree(payload);
-
-        typageMessage = jsonNode.get("type").asText();
-        log.info(typageMessage);
-
-
+    public void processDocumentForTypage(@Payload String payload) throws IOException {
+        topicProducer.getDocumentType(payload);
     }
 
 
@@ -87,7 +82,4 @@ public class TopicListener {
 
 
 
-
 }
-
- */
