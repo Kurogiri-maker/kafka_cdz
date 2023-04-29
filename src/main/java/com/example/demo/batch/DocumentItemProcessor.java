@@ -14,16 +14,19 @@ public class DocumentItemProcessor implements ItemProcessor<Document,Document> {
 
     @Override
     public Document process(@NonNull Document document) throws Exception {
+       /*
         String numero = document.getNumero();
         String path = document.getFilePath();
 
         Document d = new Document();
         d.setNumero(numero);
         d.setFilePath(path);
-        System.out.println("Processor : " +d);
+
+        */
+        System.out.println("DocumentId : " +document.getId() + " Attribute : Found");
 
         // Pass document to ocr to extract data from it
 
-        return d;
+        return document;
     }
 }

@@ -2,23 +2,15 @@ package com.example.demo.batch;
 
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.sql.DataSource;
+import java.util.Date;
 
 @Component
-public class AppConfig implements CommandLineRunner {
+public class AppConfig  {
 
     @Autowired
     private JobLauncher jobLauncher;
@@ -31,8 +23,10 @@ public class AppConfig implements CommandLineRunner {
 
 
 
-    @Override
-    public void run(String... args) throws Exception {
+
+    @Scheduled(cron = "0 0/1 * 1/1 *  *")
+    public void run() throws Exception {
+        System.out.println("Job Started at :" + new Date());
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("time", System.currentTimeMillis())
                 .toJobParameters();

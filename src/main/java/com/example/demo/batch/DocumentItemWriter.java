@@ -18,8 +18,9 @@ public class DocumentItemWriter implements ItemWriter<Document> {
 
     @Override
     public void write(List<? extends Document> docs) throws Exception {
-        System.out.println("Writer : "+ docs);
+        docs.forEach(document -> {
+            System.out.println("Document : "+ document + " is processed");
+        });
         repository.saveAll(docs);
-        System.out.println(repository.findAll());
     }
 }
