@@ -1,4 +1,4 @@
-package com.example.demo.batch;
+package com.example.demo.batch.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

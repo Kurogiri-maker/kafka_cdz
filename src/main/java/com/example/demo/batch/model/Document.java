@@ -1,4 +1,4 @@
-package com.example.demo.batch;
+package com.example.demo.batch.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +20,7 @@ public class Document {
     private Long id;
     private String numero;
     private String filePath;
+    private String type;
 
 
 }

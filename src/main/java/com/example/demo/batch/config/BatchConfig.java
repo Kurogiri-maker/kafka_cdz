@@ -1,8 +1,11 @@
-package com.example.demo.batch;
+package com.example.demo.batch.config;
 
+import com.example.demo.batch.model.Document;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.annotation.JobScope;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
@@ -14,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.Map;
 
 
 @Configuration
@@ -21,19 +25,23 @@ import javax.sql.DataSource;
 public class BatchConfig {
 
     @Autowired
+    @StepScope
     private DocumentItemProcessor processor;
 
     @Autowired
+    @JobScope
     private DocumentItemReader reader;
 
     @Autowired
-    private  DocumentItemWriter writer;
+    @JobScope
+    private DocumentItemWriter writer;
 
     @Autowired
     private DataSource dataSource;
 
     @Autowired
     private PlatformTransactionManager transactionManager;
+
 
     @Bean
     public JobRepository jobRepository() throws Exception {
@@ -49,7 +57,7 @@ public class BatchConfig {
     @Bean
     public Step myStep(JobRepository jobRepository) throws Exception {
         return new StepBuilder("myStep")
-                .<Document, Document>chunk(10)
+                .<Document, Map<Document , Map<String,String>>>chunk(1)
                 .reader(this.reader)
                 .processor(this.processor)
                 .writer(this.writer)
@@ -64,6 +72,8 @@ public class BatchConfig {
                 .incrementer(new RunIdIncrementer())
                 .start(myStep(jobRepository()))
                 .repository(jobRepository())
+                .listener(this.reader)
+                .listener(this.writer)
                 .build();
 
     }
