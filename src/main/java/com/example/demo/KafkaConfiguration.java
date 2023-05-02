@@ -1,4 +1,3 @@
-/*
 package com.example.demo;
 
 
@@ -37,5 +36,9 @@ public class KafkaConfiguration {
     public NewTopic collecteTopic() {
         return new NewTopic("collecte", 1, (short) 1);
     }
+
+    @Bean
+    public NewTopic enrichmentTopic() {
+        return new NewTopic("enrichissement", 1, (short) 1);
+    }
 }
-*/

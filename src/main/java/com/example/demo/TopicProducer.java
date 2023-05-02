@@ -1,6 +1,6 @@
-/*
 package com.example.demo;
 
+import com.example.demo.batch.model.Document;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -25,10 +27,15 @@ public class TopicProducer {
     @Autowired
     private NewTopic collecteTopic;
 
+    @Autowired
+    private NewTopic enrichmentTopic;
+
     // Serialize the document object to JSON string
     ObjectMapper objectMapper = new ObjectMapper();
 
     private final KafkaTemplate<String, String> kafkaTemplate;
+
+
 
     public void getDocumentType(String documentJson) throws JsonProcessingException {
         log.info("Payload : {}", documentJson);
@@ -44,6 +51,10 @@ public class TopicProducer {
         kafkaTemplate.send(collecteTopic.name(), jsonString);
     }
 
+    public void sendDocument(Map<Document,Map<String,String>> docProcessed) throws JsonProcessingException {
+        String json = objectMapper.writeValueAsString(docProcessed);
+        kafkaTemplate.send(enrichmentTopic.name(),json);
+    }
+
 }
 
-*/

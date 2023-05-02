@@ -1,13 +1,15 @@
-/*
 package com.example.demo;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -18,9 +20,13 @@ import java.util.Iterator;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Service
 public class TopicListener {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TopicListener.class);
+
 
     @Value("${topic.name.consumer}")
     private String topicName;
@@ -31,9 +37,9 @@ public class TopicListener {
     @Autowired
     private NewTopic collecteTopic;
 
-    private String typageMessage;
+    @Autowired
+    private NewTopic enrichmentTopic;
 
-    private String collectMessage;
 
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -45,8 +51,6 @@ public class TopicListener {
         // Parse the JSON string into a JsonNode object
         JsonNode jsonNode = objectMapper.readTree(payload);
 
-        typageMessage = jsonNode.get("type").asText();
-        log.info(typageMessage);
 
 
     }
@@ -72,17 +76,22 @@ public class TopicListener {
             log.info(attribute);
         }
 
-        collectMessage = payload;
 
     }
 
-    public String getTypageMessage(){
-        return this.typageMessage;
+    @KafkaListener(topics = "#{@enrichmentTopic.name}",groupId = "group_id")
+    public void getDocumentProcessed(@Payload String payload) throws JsonProcessingException {
+
+        LOGGER.info("///////////////////////////////////////////////////////////////////////////////\n" +
+                " Consumer //////////////////////////////////////////////////////////////////////////\n" +
+                "///////////////////////////////////////////////////////////////////////////////////\n" +
+                "Payload : "+ payload+"///////////////////////////////////////////////////////////////////\n" +
+                "/////////////////////////////////////////////////////////\n" +
+                "//////////////////////////////////////////////////////////\n");
+
     }
 
-    public String getCollectMessage(){
-        return this.collectMessage;
-    }
+
 
 
 
@@ -90,4 +99,3 @@ public class TopicListener {
 
 }
 
- */

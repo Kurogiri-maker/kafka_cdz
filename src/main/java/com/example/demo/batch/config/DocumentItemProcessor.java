@@ -37,8 +37,9 @@ public class DocumentItemProcessor implements ItemProcessor<Document,Map<Documen
         Map<String,String> attributeValueExtraced = new HashMap<>();
 
         if(b.equals(true)){
-            System.out.println("DocumentId : " +document.getId() + " Attribute :" + extractAttributeFromDocument(document , object.getAttribute()));
-            attributeValueExtraced.put(object.getAttribute(),extractAttributeFromDocument(document , object.getAttribute()));
+            String val = extractAttributeFromDocument(document , object.getAttribute());
+            System.out.println("DocumentId : " +document.getId() + " Attribute :" + val );
+            attributeValueExtraced.put(object.getAttribute(),val);
             documentProcessed.put(document,attributeValueExtraced);
         }
 

@@ -1,12 +1,15 @@
 package com.example.demo.batch.config;
 
+import com.example.demo.TopicProducer;
 import com.example.demo.batch.model.Document;
 import com.example.demo.batch.repository.DocumentRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,6 +24,10 @@ public class DocumentItemWriter implements ItemWriter<Map<Document , Map<String,
     private final DocumentRepository repository;
 
     private List<Map<Document,Map<String,String>>> documentsProcessed = new ArrayList<>();
+
+    @Autowired
+    private TopicProducer topicProducer;
+
 
 
 
@@ -72,6 +79,13 @@ public class DocumentItemWriter implements ItemWriter<Map<Document , Map<String,
             float percentage = (float) ref.getCompteur()/documentsProcessed.size();
             if( percentage >= 0.8 ){
                 System.out.println("This is attribute is valid \n" + "The percentage of documents who has a value for this attribute is " + (percentage * 100 )+"%");
+                documentsProcessed.forEach(doc -> {
+                    try {
+                        topicProducer.sendDocument(doc);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
             }else {
                 System.out.println("This is attribute is not valid \n" + "The percentage of documents who has a value for this attribute is " + (percentage * 100 )+"%");
             }
