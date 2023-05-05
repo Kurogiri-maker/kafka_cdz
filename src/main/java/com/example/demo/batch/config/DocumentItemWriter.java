@@ -83,7 +83,7 @@ public class DocumentItemWriter implements ItemWriter<Map<Document , Map<String,
             System.out.println("This is attribute is not valid \n" + "The percentage of documents who has a value for this attribute is 0.0%");
         }else{
             float percentage = (float) ref.getCompteur()/documentsProcessed.size();
-            if( percentage >= 0.3 ){
+            if( percentage >= 0.8 ){
                 System.out.println("This is attribute is valid \n" + "The percentage of documents who has a value for this attribute is " + (percentage * 100 )+"%");
                 documentsProcessed.forEach(doc -> {
                     try {
