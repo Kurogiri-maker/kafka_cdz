@@ -22,11 +22,6 @@ public class TopicProducer {
     @Value("${topic.name.producer}")
     private String topicName;
 
-    @Autowired
-    private NewTopic typageTopic;
-
-    @Autowired
-    private NewTopic collecteTopic;
 
     @Autowired
     private NewTopic enrichmentTopic;
@@ -38,7 +33,7 @@ public class TopicProducer {
 
 
 
-    public void getDocumentType(String documentJson) throws JsonProcessingException {
+    /*public void getDocumentType(String documentJson) throws JsonProcessingException {
         log.info("Payload : {}", documentJson);
         String jsonString = "{\"type\":\"" + documentJson + "\"}";
         kafkaTemplate.send(typageTopic.name(), jsonString);
@@ -49,7 +44,7 @@ public class TopicProducer {
         String jsonString = "{\"id\":\"12345\",\"siren\":\"56789\",\"refMandat\":\"98765\",\"attribute1\":\"value1\",\"attribute2\":\"value2\",\"attribute3\":\"value3\"}";
         log.info("Payload : {}", jsonString);
         kafkaTemplate.send(collecteTopic.name(), jsonString);
-    }
+    }*/
 
     public void sendDocument(EnrichmentResponse docProcessed) throws JsonProcessingException {
 //        String json = objectMapper.writeValueAsString(docProcessed);

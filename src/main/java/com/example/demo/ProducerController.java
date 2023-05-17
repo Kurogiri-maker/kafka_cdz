@@ -25,6 +25,8 @@ public class ProducerController {
     ObjectMapper mapper = new ObjectMapper();
 
 
+
+
     @PostMapping(value = "/type")
     public String getDocumentType(@RequestBody String document) throws IOException {
 
@@ -64,11 +66,10 @@ public class ProducerController {
 
         // Perform file classification based on fileContent
         String fileClassification = classifyFile(fileContent , getFilterParameters());
-        //create a random string of 6 letters
-        String randomString = UUID.randomUUID().toString().substring(0, 6);
 
 
-        return switch (fileClassification) {
+
+        String collect = switch (fileClassification) {
             case "Tiers" ->
                     "{\"id\":\"12345\",\"numero\":\"56789\",\"nom\":\"test\",\"siren\":\"56789\",\"refMandat\":\"98765\"}";
             case "Dossier" ->
@@ -79,6 +80,14 @@ public class ProducerController {
                     "{\"id\":57,\"num_dossierKPS\":\"nTbsTf\",\"num_CP\":\"dUcyEW\",\"raison_Social\":\"lxbWJf\",\"id_Tiers\":\"SYRGmC\",\"num_DC\":\"WUKJHS\",\"num_SDC\":\"WTwCQv\",\"num_CIR\":\"ZIjrua\",\"num_SIREN\":\"MxcLzb\",\"refCollaborative\":\"baqDMw\",\"code_Produit\":\"tihXoJ\",\"identifiant_de_offre_comm\":\"VbklYe\",\"chef_de_File\":\"PJgQgx\",\"num_OVI\":\"aOMrXc\",\"num_RUM\":\"EihyMI\",\"typeEnergie\":\"QynLxh\",\"produit_Comm\":\"Zrwbqp\",\"produit\":\"lXOkJd\",\"phase\":\"yCmjwk\",\"montant_pret\":84}";
             default -> "unknown document type";
         };
+
+        Random random = new Random();
+        int randomInt = random.nextInt(4);
+        for (int i = 1; i < randomInt+1; i++) {
+            String randomString = RandomStringService.generateRandomString(7);
+            collect= collect.substring(0,collect.length()-1) +",\"attribute "+i+"\":\""+randomString+"\"}" ;
+        }
+        return collect;
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.demo.batch.config;
 
 
+import com.example.demo.RandomStringService;
 import com.example.demo.batch.model.AdditionalAttribute;
 import com.example.demo.batch.model.Document;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +38,7 @@ public class DocumentItemProcessor implements ItemProcessor<Document,Map<Documen
         Map<String,String> attributeValueExtraced = new HashMap<>();
 
         if(b.equals(true)){
-            String val = extractAttributeFromDocument(document , object.getAttribute());
+            String val = RandomStringService.generateRandomString(7);
             System.out.println("DocumentId : " +document.getId() + " Attribute :" + val );
             attributeValueExtraced.put(object.getAttribute(),val);
             documentProcessed.put(document,attributeValueExtraced);
@@ -46,18 +47,4 @@ public class DocumentItemProcessor implements ItemProcessor<Document,Map<Documen
         return documentProcessed;
     }
 
-
-    public String extractAttributeFromDocument(Document d , String attribute){
-        String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        int length = Math.min(random.nextInt(5), 5)+5;
-        for(int i=0;i<length;i++){
-            int index = random.nextInt(alphabet.length());
-            char randomChar = alphabet.charAt(index);
-            sb.append(randomChar);
-        }
-
-        return sb.toString();
-    }
 }
