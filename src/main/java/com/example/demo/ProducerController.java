@@ -67,21 +67,23 @@ public class ProducerController {
         // Perform file classification based on fileContent
         String fileClassification = classifyFile(fileContent , getFilterParameters());
 
+        Random random = new Random();
 
+        Integer numero = random.nextInt(20);
 
         String collect = switch (fileClassification) {
             case "Tiers" ->
-                    "{\"id\":\"12345\",\"numero\":\"56789\",\"nom\":\"test\",\"siren\":\"56789\",\"refMandat\":\"98765\"}";
+                    "{\"numero\":\""+numero+"\",\"nom\":\"test\",\"siren\":\"56789\",\"refMandat\":\"98765\"}";
             case "Dossier" ->
-                    "{\"id\":\"54321\",\"dossier_DC\":\"facture\",\"numero\":\"986532\",\"listSDC\":\"test\",\"n_DPS\":\"3\",\"montant_du_pres\":\"80\"}";
+                    "{\"dossierDC\":\"facture\",\"numero\":\""+numero+"\",\"listSDC\":\"test\",\"n_DPS\":\"3\",\"montant_du_pres\":\"80\"}";
             //"{\"id\":\"%d\",\"dossier_DC\":\"%s\",\"numero\":\"%s\",\"listSDC\":\"%s\",\"n_DPS\":\"%s\",\"montant_du_pres\":\"%s\"}";
 
             case "Contrat" ->
-                    "{\"id\":57,\"num_dossierKPS\":\"nTbsTf\",\"num_CP\":\"dUcyEW\",\"raison_Social\":\"lxbWJf\",\"id_Tiers\":\"SYRGmC\",\"num_DC\":\"WUKJHS\",\"num_SDC\":\"WTwCQv\",\"num_CIR\":\"ZIjrua\",\"num_SIREN\":\"MxcLzb\",\"refCollaborative\":\"baqDMw\",\"code_Produit\":\"tihXoJ\",\"identifiant_de_offre_comm\":\"VbklYe\",\"chef_de_File\":\"PJgQgx\",\"num_OVI\":\"aOMrXc\",\"num_RUM\":\"EihyMI\",\"typeEnergie\":\"QynLxh\",\"produit_Comm\":\"Zrwbqp\",\"produit\":\"lXOkJd\",\"phase\":\"yCmjwk\",\"montant_pret\":84}";
+                    "{\"numero\":\""+numero+"\",\"raisonSocial\":\"dUcyEW\",\"codeProduit\":\"lxbWJf\",\"produit\":\"SYRGmC\",\"phase\":\"WUKJHS\",\"montantPret\":\"WTwCQv\"}";
             default -> "unknown document type";
         };
 
-        Random random = new Random();
+
         int randomInt = random.nextInt(4);
         for (int i = 1; i < randomInt+1; i++) {
             String randomString = RandomStringService.generateRandomString(7);
