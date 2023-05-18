@@ -4,7 +4,9 @@ package com.example.demo;
 import com.example.demo.batch.dto.AdditionalAttributeDTO;
 import com.example.demo.batch.mapper.AdditionalAttributeMapper;
 import com.example.demo.batch.model.AdditionalAttribute;
+import com.example.demo.batch.model.Document;
 import com.example.demo.batch.repository.AdditionalAttributeRepository;
+import com.example.demo.batch.repository.DocumentRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,9 +44,10 @@ public class TopicListener {
     @Autowired
     private AdditionalAttributeMapper mapper;
 
-
     @Autowired
-    private NewTopic typageTopic;
+    private DocumentRepository documentRepository;
+
+
 
     @Autowired
     private NewTopic enrichmentTopic;
@@ -119,6 +122,48 @@ public class TopicListener {
                 "//////////////////////////////////////////////////////////\n");
         AdditionalAttribute attribute = mapper.toEntity(dto);
         this.repository.save(attribute);
+
+    }
+
+    @KafkaListener(topics = "#{@synchronisationTopic.name}",groupId = "group_id")
+    public void getNewDocuments(@Payload String payload) throws JsonProcessingException {
+
+        LOGGER.info("///////////////////////////////////////////////////////////////////////////////\n" +
+                " Consumer: New Document//////////////////////////////////////////////////////////\n" +
+                "Payload : "+ payload+"/////////////////////////////////////////////////////////////\n" +
+                "//////////////////////////////////////////////////////////\n");
+
+        //extract the type and the numero of the document from the payload
+        String[] document = payload.split(" ");
+        String type = document[0];
+        String numero = document[1];
+
+        LOGGER.info("///////////////////////////////////////////////////////////////////////////////\n" +
+                " Consumer: New Document extract type & numero///////////////////////////\n" +
+                "type : "+ type+"/////////////////////////////////////////////////////////////\n" +
+                "numero : "+ numero+"/////////////////////////////////////////////////////////////\n" +
+                "//////////////////////////////////////////////////////////\n");
+
+        Document document1 = Document.builder()
+                .numero(numero)
+                .type(type)
+                .filePath("File"+numero+".pdf")
+                .build();
+
+        documentRepository.save(document1);
+
+        LOGGER.info("///////////////////////////////////////////////////////////////////////////////\n" +
+                " Consumer: New Document saved in DB////////////////////////////////////////////////////\n" +
+                document1+ "  /////////////////////////////////////////////////////////////\n" +
+                "//////////////////////////////////////////////////////////\n");
+
+
+
+
+
+        //
+
+
 
     }
 
