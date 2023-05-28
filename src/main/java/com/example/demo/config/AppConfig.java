@@ -1,8 +1,8 @@
-package com.example.demo.batch.config;
+package com.example.demo.config;
 
-import com.example.demo.batch.mapper.AdditionalAttributeMapper;
-import com.example.demo.batch.model.AdditionalAttribute;
-import com.example.demo.batch.repository.AdditionalAttributeRepository;
+import com.example.demo.mapper.AdditionalAttributeMapper;
+import com.example.demo.model.AdditionalAttribute;
+import com.example.demo.repository.AdditionalAttributeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.batch.core.*;

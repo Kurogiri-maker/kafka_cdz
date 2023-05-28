@@ -1,9 +1,9 @@
-package com.example.demo.batch.controller;
+package com.example.demo.controller;
 
-import com.example.demo.batch.mapper.AdditionalAttributeMapper;
-import com.example.demo.batch.dto.AdditionalAttributeDTO;
-import com.example.demo.batch.model.AdditionalAttribute;
-import com.example.demo.batch.repository.AdditionalAttributeRepository;
+import com.example.demo.mapper.AdditionalAttributeMapper;
+import com.example.demo.dto.AdditionalAttributeDTO;
+import com.example.demo.model.AdditionalAttribute;
+import com.example.demo.repository.AdditionalAttributeRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

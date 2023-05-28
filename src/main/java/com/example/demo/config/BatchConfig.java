@@ -1,6 +1,9 @@
-package com.example.demo.batch.config;
+package com.example.demo.config;
 
-import com.example.demo.batch.model.Document;
+import com.example.demo.batch.DocumentItemProcessor;
+import com.example.demo.batch.DocumentItemReader;
+import com.example.demo.batch.DocumentItemWriter;
+import com.example.demo.model.Document;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;

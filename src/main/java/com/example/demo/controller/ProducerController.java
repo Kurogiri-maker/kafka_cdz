@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.controller;
 
+import com.example.demo.model.FilterParameter;
+import com.example.demo.RandomStringService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -142,6 +144,15 @@ public class ProducerController {
     private List<FilterParameter> getFilterParameters() {
         List<FilterParameter> filterParameters = new ArrayList<>();
         filterParameters.add(new FilterParameter("siren", "Tiers"));
+        filterParameters.add(new FilterParameter("référence", "Tiers"));
+        filterParameters.add(new FilterParameter("Référence", "Tiers"));
+        filterParameters.add(new FilterParameter("mandat", "Tiers"));
+        filterParameters.add(new FilterParameter("nom", "Tiers"));
+        filterParameters.add(new FilterParameter("Nom", "Tiers"));
+        filterParameters.add(new FilterParameter("NOM", "Tiers"));
+        filterParameters.add(new FilterParameter("Tiers", "Tiers"));
+        filterParameters.add(new FilterParameter("tiers", "Tiers"));
+        filterParameters.add(new FilterParameter("SIREN", "Tiers"));
         filterParameters.add(new FilterParameter("ListSDC", "Dossier"));
         return filterParameters;
     }

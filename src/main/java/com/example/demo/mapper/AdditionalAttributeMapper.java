@@ -1,7 +1,7 @@
-package com.example.demo.batch.mapper;
+package com.example.demo.mapper;
 
-import com.example.demo.batch.dto.AdditionalAttributeDTO;
-import com.example.demo.batch.model.AdditionalAttribute;
+import com.example.demo.dto.AdditionalAttributeDTO;
+import com.example.demo.model.AdditionalAttribute;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;

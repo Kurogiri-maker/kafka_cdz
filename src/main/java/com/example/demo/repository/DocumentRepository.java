@@ -1,7 +1,6 @@
-package com.example.demo.batch.repository;
+package com.example.demo.repository;
 
-import com.example.demo.batch.model.Document;
-import org.springframework.data.domain.Sort;
+import com.example.demo.model.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,10 +1,10 @@
-package com.example.demo.batch.config;
+package com.example.demo.batch;
 
-import com.example.demo.TopicProducer;
-import com.example.demo.batch.model.Document;
-import com.example.demo.batch.model.EnrichmentResponse;
-import com.example.demo.batch.repository.AdditionalAttributeRepository;
-import com.example.demo.batch.repository.DocumentRepository;
+import com.example.demo.mapper.TopicProducer;
+import com.example.demo.model.Document;
+import com.example.demo.model.EnrichmentResponse;
+import com.example.demo.repository.AdditionalAttributeRepository;
+import com.example.demo.repository.DocumentRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.JobExecution;

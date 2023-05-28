@@ -1,4 +1,4 @@
-package com.example.demo.batch.model;
+package com.example.demo.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,13 +12,17 @@ import javax.persistence.Id;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdditionalAttribute {
+public class Document {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String attribute;
+    private String numero;
+    private String filePath;
     private String type;
+
 
 }
