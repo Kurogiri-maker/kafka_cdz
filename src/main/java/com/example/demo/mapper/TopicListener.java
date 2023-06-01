@@ -1,34 +1,25 @@
-package com.example.demo;
+package com.example.demo.mapper;
 
 
-import com.example.demo.batch.dto.AdditionalAttributeDTO;
-import com.example.demo.batch.mapper.AdditionalAttributeMapper;
-import com.example.demo.batch.model.AdditionalAttribute;
-import com.example.demo.batch.model.Document;
-import com.example.demo.batch.repository.AdditionalAttributeRepository;
-import com.example.demo.batch.repository.DocumentRepository;
+import com.example.demo.dto.AdditionalAttributeDTO;
+import com.example.demo.model.AdditionalAttribute;
+import com.example.demo.model.Document;
+import com.example.demo.repository.AdditionalAttributeRepository;
+import com.example.demo.repository.DocumentRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 @Slf4j
 @AllArgsConstructor

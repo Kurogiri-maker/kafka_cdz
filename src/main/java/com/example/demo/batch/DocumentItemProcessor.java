@@ -1,9 +1,9 @@
-package com.example.demo.batch.config;
+package com.example.demo.batch;
 
 
 import com.example.demo.RandomStringService;
-import com.example.demo.batch.model.AdditionalAttribute;
-import com.example.demo.batch.model.Document;
+import com.example.demo.model.AdditionalAttribute;
+import com.example.demo.model.Document;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
