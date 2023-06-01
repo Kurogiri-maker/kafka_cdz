@@ -142,7 +142,12 @@ public class ProducerController {
     private List<FilterParameter> getFilterParameters() {
         List<FilterParameter> filterParameters = new ArrayList<>();
         filterParameters.add(new FilterParameter("siren", "Tiers"));
+        filterParameters.add(new FilterParameter("nom", "Tiers"));
+        filterParameters.add(new FilterParameter("refMandat", "Tiers"));
+        filterParameters.add(new FilterParameter("n_DPS", "Dossier"));
+        filterParameters.add(new FilterParameter("dossierDC", "Dossier"));
         filterParameters.add(new FilterParameter("ListSDC", "Dossier"));
+
         return filterParameters;
     }
 
