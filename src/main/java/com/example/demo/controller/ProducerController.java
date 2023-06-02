@@ -153,7 +153,12 @@ public class ProducerController {
         filterParameters.add(new FilterParameter("Tiers", "Tiers"));
         filterParameters.add(new FilterParameter("tiers", "Tiers"));
         filterParameters.add(new FilterParameter("SIREN", "Tiers"));
+        filterParameters.add(new FilterParameter("nom", "Tiers"));
+        filterParameters.add(new FilterParameter("refMandat", "Tiers"));
+        filterParameters.add(new FilterParameter("n_DPS", "Dossier"));
+        filterParameters.add(new FilterParameter("dossierDC", "Dossier"));
         filterParameters.add(new FilterParameter("ListSDC", "Dossier"));
+
         return filterParameters;
     }
 
